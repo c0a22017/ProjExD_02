@@ -11,6 +11,9 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    bb_img = pg.Surface((20,20)) #pra1:透明のSurfaceを作る
+    pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
+    
     clock = pg.time.Clock()
     tmr = 0
     while True:
