@@ -1,6 +1,6 @@
+import random
 import sys
 import pygame as pg
-
 
 WIDTH, HEIGHT = 1600, 900
 
@@ -13,6 +13,9 @@ def main():
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     bb_img = pg.Surface((20,20)) #pra1:透明のSurfaceを作る
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
+    bb_rct = bb_img.get_rect()
+    bb_rct.centerx = random.randint(0, WIDTH)
+    bb_rct.centery = random.randint(0, HEIGHT)
     
     clock = pg.time.Clock()
     tmr = 0
