@@ -1,7 +1,7 @@
 import random
 import sys
 import pygame as pg
-
+import time
 
 WIDTH, HEIGHT = 1100, 700
 
@@ -33,17 +33,36 @@ def main():
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect()
-    kk_rct.center = 900,400#
+    kk_rct.center = 900,400
     bb_img = pg.Surface((20,20))  #練習1　透明なsurfaceを作る
     bb_img.set_colorkey((0,0,0)) #練習1　黒をなくす
     pg.draw.circle(bb_img,(255,0,0), (10,10), 10)
     bb_rct = bb_img.get_rect() #練習1-3
-
     bb_rct.centerx = random.randint(0,WIDTH)
     bb_rct.centery = random.randint(0,HEIGHT)
     vx,vy =+5,+5
+    kk_zis = {  # 辞書作成
+        (5,0):pg.transform.rotozoom(kk_img, 0, 1.0),
+        (5,-5):pg.transform.rotozoom(kk_img, 316, 1.0),
+        (0,-5):pg.transform.rotozoom(kk_img, 270, 1.0),
+        (-5,-5):pg.transform.rotozoom(kk_img, 315, 1.0),
+        (-5,0):pg.transform.rotozoom(kk_img, 0, 1.0),
+        (-5,5):pg.transform.rotozoom(kk_img, 45, 1.0),
+        (0,5):pg.transform.rotozoom(kk_img, 90, 1.0),
+        (5,5):pg.transform.rotozoom(kk_img, 45, 1.0)
+    }
+    accs = [a for a in range(1, 11)]
+    # 追加機能
+    fonto =  pg.font.Font(None, 80)
+    moji = fonto.render("GAME OVER", True, (255,255,255))
+    
+    
     clock = pg.time.Clock()
     tmr = 0
+    bb_size = 20
+    bb_expand = True
+    
+    one = 1
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -52,13 +71,22 @@ def main():
         if kk_rct.colliderect(bb_rct):
             print("ゲームオーバー")
             return
+        
         key_lst = pg.key.get_pressed() #練習3
         sum_mv = [0,0]
         for k, tpl in delta.items():
             if key_lst[k]:  #キーが押されたら反応
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
-
+        
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+        if(sum_mv[0] >= 5):
+            kk_img = pg.transform.flip(kk_img, False, True)
+        if sum_mv != [0, 0]:
+            kk_img = kk_zis[tuple(sum_mv)]
+            if sum_mv[0] >= 5:
+                kk_img = pg.transform.flip(kk_img, True, False)        
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
         if check_bound(kk_rct) != (True, True): # 練習4 はみ出てない判定
@@ -71,7 +99,18 @@ def main():
             vx *= -1
         if not tate:#縦方向にはみ出たら
             vy *= -1
-        
+        if bd_expand:
+            bd_size += 1  # サイズを1増やす
+            if bd_size >= 500:  # 最大サイズに達したら
+                bd_expand = False
+        else:
+             bd_size -= 1  # サイズを1減らす
+             if bd_size <= 20:  # 最小サイズに達したら
+                 bd_expand = True
+        bd_img = pg.Surface((bd_size, bd_size))  # 爆弾のサイズを変更
+        bd_img.set_colorkey((0, 0, 0))  # 黒い部分を透明にする
+        pg.draw.circle(bd_img, (255, 0, 0), (bd_size // 2, bd_size // 2), bd_size // 2)
+        screen.blit(bd_img, bb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(100)
