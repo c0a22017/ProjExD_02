@@ -14,10 +14,10 @@ delta = {
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     yoko, tate = True, True
-    if rct.left < 0 or WIDTH < rct.right:
+    if rct.left < 0 or WIDTH < rct.right: #yoko
         yoko = False
 
-    if rct.top < 0 or HEIGHT < rct.bottom:
+    if rct.top < 0 or HEIGHT < rct.bottom: #tate
         tate = False
     return yoko, tate
 
@@ -31,14 +31,14 @@ def main():
     kk_img2 = pg.transform.rotozoom(kk_img2, 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
-    bb_img = pg.Surface((20, 20))
-    bb_img.set_colorkey((0, 0, 0))
+    bb_img = pg.Surface((20, 20)) #pra1
+    bb_img.set_colorkey((0, 0, 0)) #kuro
     pg.draw.circle(bb_img, (255, 0, 0), (10, 40), 10)
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, HEIGHT)
-    vx, vy = +5, +5
-    kk_zis = {
+    vx, vy = +5, +5 #pra2
+    kk_zis = { #dict
         (5, 0): pg.transform.rotozoom(kk_img, 0, 1.0),
         (5, -5): pg.transform.rotozoom(kk_img, 316, 1.0),
         (0, -5): pg.transform.rotozoom(kk_img, 270, 1.0),
@@ -56,7 +56,7 @@ def main():
 
     clock = pg.time.Clock()
     tmr = 0
-    bb_size = 20
+    bb_size = 20 #bombsize
     bb_expand = True
 
     while True:
@@ -65,7 +65,7 @@ def main():
                 pg.quit()
                 sys.exit()
 
-        if kk_rct.colliderect(bb_rct):
+        if kk_rct.colliderect(bb_rct): #pra5
             screen.blit(bg_img, [0, 0])
             screen.blit(kk_img2, kk_rct)
             screen.blit(moji, [400, 400])
@@ -99,17 +99,17 @@ def main():
         avx, avy = vx * accs[min(tmr // 500, 9)], vy * accs[min(tmr // 500, 9)]
         bb_rct.move_ip(avx, avy)
         yoko, tate = check_bound(bb_rct)
-        if not yoko:
+        if not yoko: #if yoko
             vx *= -1
-        if not tate:
+        if not tate: #if tate
             vy *= -1
         if bb_expand:
-            bb_size += 1
-            if bb_size >= 500:
+            bb_size += 1 #incluce 1
+            if bb_size >= 500: #if max
                 bb_expand = False
         else:
-            bb_size -= 1
-            if bb_size <= 20:
+            bb_size -= 1 #-1
+            if bb_size <= 20: #if min
                 bb_expand = True
         bb_img = pg.Surface((bb_size, bb_size))
         bb_img.set_colorkey((0, 0, 0))
