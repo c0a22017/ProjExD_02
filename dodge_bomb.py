@@ -12,6 +12,7 @@ def main():
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     bb_img = pg.Surface((20,20)) #pra1:透明のSurfaceを作る
+    bb_img.set_colorkey((0,0,0)) #black to clear
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)
