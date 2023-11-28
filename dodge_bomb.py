@@ -122,7 +122,7 @@ def main():
         screen.blit(bd_img, bb_rct)
         pg.display.update()
         tmr += 1
-        clock.tick(100)
+        clock.tick(500)
 
 
 if __name__ == "__main__":
